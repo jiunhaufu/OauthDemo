@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">OauthDemo</string>
+    <!--google-->
+    <string name="server_client_id">401474563820-91eqjooqgjus3m18m2gtebiolgdb51v0.apps.googleusercontent.com</string>
+    <!--facebook-->
+
+</resources>

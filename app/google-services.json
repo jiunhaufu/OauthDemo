@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "401474563820",
+    "project_id": "oauthdemo-191109"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:401474563820:android:71d34af01a833186",
+        "android_client_info": {
+          "package_name": "idv.alfie.oauthdemo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "401474563820-91eqjooqgjus3m18m2gtebiolgdb51v0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "idv.alfie.oauthdemo",
+            "certificate_hash": "1bacacb6c120bccd501d2eb0d984baf9f84ffd71"
+          }
+        },
+        {
+          "client_id": "401474563820-qb9h2hc3aj3f1f29355j8oj9tpkoggof.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAiro08cjGZk5UBJWq62mjwoBTPC0OuKjI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

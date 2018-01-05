@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="idv.alfie.oauthdemo.MainActivity">
+
+
+    <Button
+        android:id="@+id/btgin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Google登入" />
+
+    <Button
+        android:id="@+id/btfin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Facebook登入" />
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="name"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/tvEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="email"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/tvOauthId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="id"
+        android:textAlignment="center" />
+
+    <ImageView
+        android:id="@+id/ivPicture"
+        android:layout_width="match_parent"
+        android:layout_height="120px"
+        app:srcCompat="@mipmap/ic_launcher_round" />
+
+    <Button
+        android:id="@+id/btgout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Google登出" />
+
+    <Button
+        android:id="@+id/btfout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Facebook登出" />
+
+
+</LinearLayout>
