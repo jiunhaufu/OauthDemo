@@ -7,24 +7,11 @@
     android:orientation="vertical"
     tools:context="idv.alfie.oauthdemo.MainActivity">
 
-    <com.google.android.gms.common.SignInButton
-        android:id="@+id/sign_in_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
     <Button
         android:id="@+id/btgin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Google登入" />
-
-    <com.facebook.login.widget.LoginButton
-        android:id="@+id/login_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="3dp"
-        android:layout_marginBottom="3dp" />
 
     <Button
         android:id="@+id/btfin"
@@ -70,6 +57,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Facebook登出" />
+
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/login_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
 
 
 </LinearLayout>

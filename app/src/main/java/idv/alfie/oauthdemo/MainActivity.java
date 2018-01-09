@@ -18,6 +18,8 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
@@ -31,6 +33,11 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
@@ -41,8 +48,6 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "OauthDemo";
     private GoogleSignInClient mGoogleSignInClient;
     /*facebook*/
-    private static final String EMAIL = "email";
-    private static final String USER_POSTS = "user_posts";
     private CallbackManager mCallbackManager;
 
     @Override
@@ -56,16 +61,6 @@ public class MainActivity extends AppCompatActivity {
                 .requestProfile()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        //官方登入按鈕
-        SignInButton signInButton = findViewById(R.id.sign_in_button);
-        signInButton.setSize(SignInButton.SIZE_STANDARD);
-        signInButton.setColorScheme(SignInButton.COLOR_AUTO);
-        signInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signIn();
-            }
-        });
         //自訂登入按鈕
         Button gSignIn = (Button)findViewById(R.id.btgin);
         gSignIn.setOnClickListener(new View.OnClickListener() {
@@ -86,35 +81,87 @@ public class MainActivity extends AppCompatActivity {
         /*facebook*/
         //printhashkey();
 
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        AppEventsLogger.activateApp(this);
+        FacebookSdk.sdkInitialize(this.getApplicationContext());
 
         mCallbackManager = CallbackManager.Factory.create();
+        LoginManager.getInstance().registerCallback(
+                mCallbackManager,
+                new FacebookCallback < LoginResult > () {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        // Handle success
+                        System.out.println("onSuccess");
 
-        LoginButton mLoginButton = findViewById(R.id.login_button);
+                        String accessToken = loginResult.getAccessToken()
+                                .getToken();
+                        Log.i("accessToken", accessToken);
 
-        // Set the initial permissions to request from the user while logging in
-        mLoginButton.setReadPermissions(Arrays.asList(EMAIL, USER_POSTS));
+                        GraphRequest request = GraphRequest.newMeRequest(
+                                loginResult.getAccessToken(),
+                                new GraphRequest.GraphJSONObjectCallback() {@Override
+                                public void onCompleted(JSONObject object,
+                                                        GraphResponse response) {
 
-        // Register a callback to respond to the user
-        mLoginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+                                    Log.i("LoginActivity",
+                                            object.toString());
+                                    try {
+                                        String id = object.getString("id");
+                                        try {
+                                            URL profile_pic = new URL(
+                                                    "http://graph.facebook.com/" + id + "/picture?type=large");
+                                            Log.i("profile_pic",
+                                                    profile_pic + "");
+
+                                        } catch (MalformedURLException e) {
+                                            e.printStackTrace();
+                                        }
+                                        String fields = object.getString("fields");
+                                        String name = object.getString("name");
+                                        String email = object.getString("email");
+                                        String gender = object.getString("gender");
+                                        String birthday = object.getString("birthday");
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                                });
+                        Bundle parameters = new Bundle();
+                        parameters.putString("fields","id,name,email,gender,birthday");
+                        request.setParameters(parameters);
+                        request.executeAsync();
+                    }
+
+                    @Override
+                    public void onCancel() {
+                    }
+
+                    @Override
+                    public void onError(FacebookException exception) {
+                    }
+                }
+        );
+        //自訂登入按鈕
+        Button fSignIn = (Button)findViewById(R.id.btfin);
+        fSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onSuccess(LoginResult loginResult) {
-                setResult(RESULT_OK);
-                finish();
-            }
-
-            @Override
-            public void onCancel() {
-                setResult(RESULT_CANCELED);
-                finish();
-            }
-
-            @Override
-            public void onError(FacebookException e) {
-                // Handle exception
+            public void onClick(View v) {
+                LoginManager.getInstance().logInWithReadPermissions(
+                        MainActivity.this,
+                        Arrays.asList("user_friends", "email", "public_profile")
+                );
             }
         });
+        //自訂登出按鈕
+        Button fSignOut = (Button)findViewById(R.id.btfout);
+        fSignOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LoginManager.getInstance().logOut();
+            }
+        });
+
+
+
     }
 
 
