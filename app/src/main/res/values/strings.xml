@@ -3,5 +3,7 @@
     <!--google-->
     <string name="server_client_id">401474563820-91eqjooqgjus3m18m2gtebiolgdb51v0.apps.googleusercontent.com</string>
     <!--facebook-->
+    <string name="facebook_app_id">1775607215791881</string>
+    <string name="fb_login_protocol_scheme">fb1775607215791881</string>
 
 </resources>

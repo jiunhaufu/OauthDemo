@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,24 +14,36 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.gms.auth.api.Auth;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
-
+    /*google*/
     private static final int RC_SIGN_IN = 1;
     private static final String TAG = "OauthDemo";
     private GoogleSignInClient mGoogleSignInClient;
+    /*facebook*/
+    private static final String EMAIL = "email";
+    private static final String USER_POSTS = "user_posts";
+    private CallbackManager mCallbackManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +56,17 @@ public class MainActivity extends AppCompatActivity {
                 .requestProfile()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        //官方登入按鈕
+        SignInButton signInButton = findViewById(R.id.sign_in_button);
+        signInButton.setSize(SignInButton.SIZE_STANDARD);
+        signInButton.setColorScheme(SignInButton.COLOR_AUTO);
+        signInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                signIn();
+            }
+        });
+        //自訂登入按鈕
         Button gSignIn = (Button)findViewById(R.id.btgin);
         gSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
                 signIn();
             }
         });
+        //自訂登出按鈕
         Button gSignOut = (Button)findViewById(R.id.btgout);
         gSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,7 +84,37 @@ public class MainActivity extends AppCompatActivity {
         });
 
         /*facebook*/
-        printhashkey();
+        //printhashkey();
+
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
+
+        mCallbackManager = CallbackManager.Factory.create();
+
+        LoginButton mLoginButton = findViewById(R.id.login_button);
+
+        // Set the initial permissions to request from the user while logging in
+        mLoginButton.setReadPermissions(Arrays.asList(EMAIL, USER_POSTS));
+
+        // Register a callback to respond to the user
+        mLoginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                setResult(RESULT_OK);
+                finish();
+            }
+
+            @Override
+            public void onCancel() {
+                setResult(RESULT_CANCELED);
+                finish();
+            }
+
+            @Override
+            public void onError(FacebookException e) {
+                // Handle exception
+            }
+        });
     }
 
 
@@ -98,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
         }
+        mCallbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     /*google*/
@@ -142,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    
+
 
 
 
