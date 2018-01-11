@@ -7,7 +7,6 @@ import android.content.pm.Signature;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -48,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     /*facebook*/
     private CallbackManager mCallbackManager;
     /*UI*/
+    private TextView tv_type;
     private TextView tv_name;
     private TextView tv_email;
     private TextView tv_oauthId;
@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void findViews() {
+        tv_type = (TextView)findViewById(R.id.tvType);
         tv_name = (TextView)findViewById(R.id.tvName);
         tv_email = (TextView)findViewById(R.id.tvEmail);
         tv_oauthId = (TextView)findViewById(R.id.tvOauthId);
@@ -142,8 +143,10 @@ public class MainActivity extends AppCompatActivity {
 
     /*google*/
     private void googleSignIn() {
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
+        if (oauth.equals("GUEST")){
+            Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+            startActivityForResult(signInIntent, RC_SIGN_IN);
+        }
     }
     /*google*/
     private void googleSignOut() {
@@ -156,9 +159,11 @@ public class MainActivity extends AppCompatActivity {
     }
     /*facebook*/
     private void facebookSignIn() {
-        LoginManager.getInstance().logInWithReadPermissions(MainActivity.this,
-                Arrays.asList("public_profile","email", "user_friends" )
-        );
+        if (oauth.equals("GUEST")){
+            LoginManager.getInstance().logInWithReadPermissions(MainActivity.this,
+                    Arrays.asList("public_profile","email", "user_friends" )
+            );
+        }
     }
     /*facebook*/
     private void facebookSignOut() {
@@ -247,6 +252,7 @@ public class MainActivity extends AppCompatActivity {
             new DownloadImageTask(iv_picture).execute(picture);
             oauth = type;
         }
+        tv_type.setText(oauth);
     }
 
     /*facebook*/
