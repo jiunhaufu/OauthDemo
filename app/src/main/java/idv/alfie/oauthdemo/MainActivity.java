@@ -24,6 +24,7 @@ import com.facebook.GraphResponse;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -41,8 +42,7 @@ import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
     /*google*/
-    private static final int RC_SIGN_IN = 1;
-    private static final String TAG = "OauthDemo";
+    private static final int G_SIGN_IN = 1;
     private GoogleSignInClient mGoogleSignInClient;
     /*facebook*/
     private CallbackManager mCallbackManager;
@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         /*facebook*/
         //printhashkey();
-        FacebookSdk.sdkInitialize(this.getApplicationContext());
+        //FacebookSdk.sdkInitialize(this.getApplicationContext());
         mCallbackManager = CallbackManager.Factory.create();
         LoginManager.getInstance().registerCallback(mCallbackManager,
             new FacebookCallback < LoginResult > () {
@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
     private void googleSignIn() {
         if (oauth.equals("GUEST")){
             Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-            startActivityForResult(signInIntent, RC_SIGN_IN);
+            startActivityForResult(signInIntent, G_SIGN_IN);
         }
     }
     /*google*/
@@ -163,6 +163,23 @@ public class MainActivity extends AppCompatActivity {
             LoginManager.getInstance().logInWithReadPermissions(MainActivity.this,
                     Arrays.asList("public_profile","email", "user_friends" )
             );
+//            LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
+//            loginButton.setReadPermissions("email");
+//            loginButton.setReadPermissions("public_profile");
+//            loginButton.registerCallback(mCallbackManager,
+//                    new FacebookCallback < LoginResult > () {
+//                        @Override
+//                        public void onSuccess(LoginResult loginResult) {
+//                            updateFacebookInfo(loginResult.getAccessToken());
+//                        }
+//                        @Override
+//                        public void onCancel() {
+//                        }
+//                        @Override
+//                        public void onError(FacebookException exception) {
+//                        }
+//                    });
+//            loginButton.performClick();
         }
     }
     /*facebook*/
@@ -175,14 +192,13 @@ public class MainActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         /*google*/
-        if (requestCode == RC_SIGN_IN) {
+        if (requestCode == G_SIGN_IN) {
             //登入成功後取得資料
             try {
                 GoogleSignInAccount account = GoogleSignIn.getSignedInAccountFromIntent(data).getResult(ApiException.class);
                 //登入成功
                 updateGoogleInfo(account);
             } catch (ApiException e) {
-                Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
                 //登入失敗
                 updateGoogleInfo(null);
             }
