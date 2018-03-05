@@ -275,7 +275,7 @@ public class MainActivity extends AppCompatActivity {
     public void printhashkey(){
         try {
             PackageInfo info = getPackageManager().getPackageInfo(
-                    "idv.alfie.oauthdemo",
+                    getPackageName(),
                     PackageManager.GET_SIGNATURES);
             for (Signature signature : info.signatures) {
                 MessageDigest md = MessageDigest.getInstance("SHA");
