@@ -7,6 +7,7 @@ import android.content.pm.Signature;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -229,10 +230,14 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onCompleted(JSONObject object, GraphResponse response) {
                     try {
-                        //String id = object.getString("id");
                         String id = Profile.getCurrentProfile().getId();
-                        //String name = object.getString("name");
+                        if (TextUtils.isEmpty(id)) {
+                            id = object.getString("id");
+                        }
                         String name = Profile.getCurrentProfile().getName();
+                        if (TextUtils.isEmpty(name)) {
+                            name = object.getString("name");
+                        }
                         String email = object.getString("email");
                         String picture = String.valueOf(Profile.getCurrentProfile().getProfilePictureUri(100, 100));
                         updateUI(id, name, email, picture, "FACEBOOK");
